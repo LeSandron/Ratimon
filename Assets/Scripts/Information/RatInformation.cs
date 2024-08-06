@@ -10,8 +10,7 @@ public class RatInformation
     public int ratAttack { get; set; }
     public int ratDefense { get; set; }
     public int ratSpeed { get; set; }
-    
-    public Sprite ratSprite { get; set; }
+    public Sprite Sprite { get; set; }
 
 
 }

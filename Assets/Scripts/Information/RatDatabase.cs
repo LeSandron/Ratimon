@@ -25,8 +25,8 @@ public class RatDatabase
 
     private void InitializeDatabase()
     {
-        Rats.Add(new RatInformation { ratName = "Ratomatcho", ratHp = 25, ratAttack = 25, ratDefense = 25, ratSpeed = 25, ratSprite = Resources.Load<Sprite>("Assets/Resources/Rat/Ratomatcho") });
-        Rats.Add(new RatInformation { ratName = "Ratsoak", ratHp = 35, ratAttack = 40, ratDefense = 55, ratSpeed = 15, ratSprite = Resources.Load<Sprite>("Assets/Resources/Rat/Ratomatcho") });
+        Rats.Add(new RatInformation { ratName = "Ratomatcho", ratHp = 25, ratAttack = 25, ratDefense = 25, ratSpeed = 25, Sprite = Resources.Load<Sprite>("Sprites/Ratomatcho") });
+        Rats.Add(new RatInformation { ratName = "Ratsoak", ratHp = 35, ratAttack = 40, ratDefense = 55, ratSpeed = 15, Sprite = Resources.Load<Sprite>("Sprites/Ratsoak") });
     }
 
     public RatInformation GetRatByName(string name)

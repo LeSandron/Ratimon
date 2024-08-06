@@ -20,6 +20,7 @@ public class BattleSystem : MonoBehaviour
     {
         ratDatabase = new RatDatabase();
         state = BattleState.START;
+        
 
         DebugStats("Ratsoak");
         DebugStats("Ratomatcho");
@@ -30,7 +31,7 @@ public class BattleSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void DebugStats(string ratName)
@@ -39,7 +40,7 @@ public class BattleSystem : MonoBehaviour
 
         if( rat != null)
         {
-            print($"Name:{rat.ratName}, Hp { rat.ratHp}, Attack {rat.ratAttack}, Defense {rat.ratDefense}, Speed {rat.ratSpeed}, Sprite {rat.ratSprite.name}");
+            print($"Name:{rat.ratName}, Hp { rat.ratHp}, Attack {rat.ratAttack}, Defense {rat.ratDefense}, Speed {rat.ratSpeed}, Sprite {rat.Sprite.name}");
         }
     }
 
@@ -50,11 +51,36 @@ public class BattleSystem : MonoBehaviour
 
         allyName.text = allyRat.ratName;
         allyLevel.text = "LV. 5";
-        allySprite.sprite = allyRat.ratSprite;
+        allySprite.sprite = allyRat.Sprite;
 
         enemyName.text = enemyRat.ratName;
         enemyLevel.text = "LV. 5";
-        enemySprite.sprite = enemyRat.ratSprite;
+        enemySprite.sprite = enemyRat.Sprite;
+
+        if(allyRat.ratSpeed > enemyRat.ratSpeed)
+        {
+            print("Player is faster");
+            state = BattleState.PLAYERTURN;
+        }
+        else if(allyRat.ratSpeed < enemyRat.ratSpeed)
+        {
+            print("Enemy is faster");
+            state = BattleState.ENEMYTURN;
+        }
+        else if(allyRat.ratSpeed == enemyRat.ratSpeed)
+        {
+            print("speeds are the same, doing a coin flip");
+            if(UnityEngine.Random.Range(0,100) <= 50)
+            {
+                state = BattleState.PLAYERTURN;
+                print("player won the coin flip");
+            }
+            else
+            {
+                state = BattleState.ENEMYTURN;
+                print("Enemy won the coin flip");
+            }
+        }
 
 
     }
