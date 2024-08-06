@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST,}
 
 public class BattleSystem : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class BattleSystem : MonoBehaviour
 
     public Image allySprite, enemySprite;
     public TextMeshProUGUI allyName, enemyName, allyLevel, enemyLevel;
+    public GameObject encounter;
 
     
     // Start is called before the first frame update
@@ -24,14 +25,14 @@ public class BattleSystem : MonoBehaviour
 
         DebugStats("Ratsoak");
         DebugStats("Ratomatcho");
-        SetUpBattle();
+     
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Cursor.lockState = CursorLockMode.None;
+        
     }
 
     public void DebugStats(string ratName)
@@ -47,7 +48,7 @@ public class BattleSystem : MonoBehaviour
     public void SetUpBattle()
     {
         RatInformation allyRat = ratDatabase.GetRatByName("Ratsoak");
-        RatInformation enemyRat = ratDatabase.GetRatByName("Ratomatcho");
+        RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
 
         allyName.text = allyRat.ratName;
         allyLevel.text = "LV. 5";
