@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RatDatabase : MonoBehaviour
+public class RatDatabase
 {
     public List<RatInformation> Rats { get; private set; }
 
@@ -25,8 +25,8 @@ public class RatDatabase : MonoBehaviour
 
     private void InitializeDatabase()
     {
-        Rats.Add(new RatInformation { ratName = "Ratomatcho", ratHp = 25, ratAttack = 25, ratDefense = 25, ratSpeed = 25 });
-        Rats.Add(new RatInformation { ratName = "Ratsoak", ratHp = 25, ratAttack = 25, ratDefense = 25, ratSpeed = 25 });
+        Rats.Add(new RatInformation { ratName = "Ratomatcho", ratHp = 25, ratAttack = 25, ratDefense = 25, ratSpeed = 25, ratSprite = Resources.Load<Sprite>("Assets/Resources/Rat/Ratomatcho") });
+        Rats.Add(new RatInformation { ratName = "Ratsoak", ratHp = 35, ratAttack = 40, ratDefense = 55, ratSpeed = 15, ratSprite = Resources.Load<Sprite>("Assets/Resources/Rat/Ratomatcho") });
     }
 
     public RatInformation GetRatByName(string name)

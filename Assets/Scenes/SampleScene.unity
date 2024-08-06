@@ -707,7 +707,7 @@ GameObject:
   - component: {fileID: 278260111}
   - component: {fileID: 278260110}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -950,7 +950,7 @@ GameObject:
   - component: {fileID: 356408757}
   - component: {fileID: 356408756}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: ELevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1102,6 +1102,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  allySprite: {fileID: 1037046471}
+  enemySprite: {fileID: 1534237552}
+  allyName: {fileID: 1610587007}
+  enemyName: {fileID: 278260110}
+  allyLevel: {fileID: 1645467101}
+  enemyLevel: {fileID: 356408756}
 --- !u!4 &503763294
 Transform:
   m_ObjectHideFlags: 0
@@ -1631,7 +1637,7 @@ GameObject:
   - component: {fileID: 1037046472}
   - component: {fileID: 1037046471}
   m_Layer: 0
-  m_Name: Image
+  m_Name: AllySprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2510,7 +2516,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1438367885}
-  - component: {fileID: 1438367886}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -2534,23 +2539,6 @@ Transform:
   - {fileID: 1534237551}
   m_Father: {fileID: 288790695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1438367886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438367884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 261d5ffb5774d3a4c8da60128113c2ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ratName: 
-  ratLevel: 
-  ratBaseAttack: 0
-  ratHp: 0
-  ratcurrentHP: 0
 --- !u!1 &1534237550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2563,7 +2551,7 @@ GameObject:
   - component: {fileID: 1534237553}
   - component: {fileID: 1534237552}
   m_Layer: 0
-  m_Name: Image
+  m_Name: EnemySprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2725,7 +2713,7 @@ GameObject:
   - component: {fileID: 1610587008}
   - component: {fileID: 1610587007}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2859,7 +2847,7 @@ GameObject:
   - component: {fileID: 1645467102}
   - component: {fileID: 1645467101}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3499,7 +3487,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1924552699}
-  - component: {fileID: 1924552700}
   m_Layer: 0
   m_Name: Ally
   m_TagString: Untagged
@@ -3523,23 +3510,6 @@ Transform:
   - {fileID: 1037046470}
   m_Father: {fileID: 288790695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1924552700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924552698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 261d5ffb5774d3a4c8da60128113c2ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ratName: 
-  ratLevel: 
-  ratBaseAttack: 0
-  ratHp: 0
-  ratcurrentHP: 0
 --- !u!1 &1989769682
 GameObject:
   m_ObjectHideFlags: 0
