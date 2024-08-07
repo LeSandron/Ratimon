@@ -62,6 +62,10 @@ public class BattleSystem : MonoBehaviour
         enemyLevel.text = "LV. 5";
         enemySprite.sprite = enemyRat.Sprite;
 
+
+
+
+
         if(allyRat.ratSpeed > enemyRat.ratSpeed)
         {
             print("Player is faster");
