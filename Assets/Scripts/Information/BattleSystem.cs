@@ -9,6 +9,7 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST,}
 public class BattleSystem : MonoBehaviour
 {
     private RatDatabase ratDatabase;
+    public PlayerParty playerParty;
     public BattleState state;
 
     public Image allySprite, enemySprite;
@@ -16,25 +17,33 @@ public class BattleSystem : MonoBehaviour
     public Button attack, run;
     public GameObject encounter;
 
-    
+    RatInformation allyRat;
+    RatInformation enemyRat;
+    private int loopCount;
+    private bool playerL, enemyL;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        loopCount = 0;
         ratDatabase = new RatDatabase();
         state = BattleState.START;
         attack.interactable = false;
         run.interactable = false;
 
-        DebugStats("Ratsoak");
-        DebugStats("Ratomatcho");
-     
+        playerParty.AddPartyRat("Rattack");
+        playerParty.AddPartyRat("Ratbat");
+        playerParty.AddPartyRat("Ratsoak");
+        
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void DebugStats(string ratName)
@@ -49,8 +58,11 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetUpBattle()
     {
-        RatInformation allyRat = ratDatabase.GetRatByName("Ratsoak");
+        RatInformation allyRat = playerParty.FindAliveRat();
         RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+
+        DebugStats(allyRat.ratName);
+        DebugStats(enemyRat.ratName);
 
         dialogueTEXT.text = "A wild " + enemyRat.ratName + " Has appeared!";
 
@@ -69,48 +81,35 @@ public class BattleSystem : MonoBehaviour
         if(allyRat.ratSpeed > enemyRat.ratSpeed)
         {
             print("Player is faster");
-            state = BattleState.PLAYERTURN;
-            attack.interactable = true;
-            run.interactable = true;
             yield return new WaitForSeconds(2);
             dialogueTEXT.text = "Players turn, Choose an Action";
-
+            state = BattleState.PLAYERTURN;
             playerTurn();
+
         }
         else if(allyRat.ratSpeed < enemyRat.ratSpeed)
         {
             print("Enemy is faster");
             state = BattleState.ENEMYTURN;
-            attack.interactable = false;
-            run.interactable = false;
-            yield return new WaitForSeconds(2);
-            dialogueTEXT.text = "Enemies Turn!";
-
             enemyTurn();
+
+
         }
         else if(allyRat.ratSpeed == enemyRat.ratSpeed)
         {
             print("speeds are the same, doing a coin flip");
             if(UnityEngine.Random.Range(0,100) <= 50)
             {
-                state = BattleState.PLAYERTURN;
                 print("player won the coin flip");
-                attack.interactable = true;
-                run.interactable = true;
                 yield return new WaitForSeconds(2);
                 dialogueTEXT.text = "Players turn, Choose an Action";
-
+                state = BattleState.PLAYERTURN;
                 playerTurn();
             }
             else
-            {
-                state = BattleState.ENEMYTURN;
+            { 
                 print("Enemy won the coin flip");
-                attack.interactable = true;
-                run.interactable = true;
-                yield return new WaitForSeconds(2);
-                dialogueTEXT.text = "Enemies Turn!";
-
+                state = BattleState.ENEMYTURN;
                 enemyTurn();
             }
         }
@@ -125,21 +124,41 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(SetUpBattle());
     }
 
-    private void playerTurn()
+    public void playerTurn()
     {
+        print("players turn");
+        dialogueTEXT.text = "Players turn, Choose an Action";
+        attack.interactable = true;
+        run.interactable = true;
         
     }
+
     private void enemyTurn()
     {
-
+        print("Enemies turn");
+        StartCoroutine(EnemyAttack());
+        enemyL = true;
     }
 
     IEnumerator PlayerAttack()
     {
-        print("Ow, dont press my button!");
-        attack.interactable = false;
-        run.interactable = false;
-        yield return new WaitForSeconds(2);
+        if(state == BattleState.PLAYERTURN)
+        {
+            RatInformation allyRat = playerParty.FindAliveRat();
+            RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+            allySprite.sprite = allyRat.Sprite;
+            attack.interactable = false;
+            run.interactable = false;
+            print("Ow, dont press my button!");
+            enemyRat.DealDamage(enemyRat.CalculateDamage(allyRat, enemyRat));
+            print(enemyRat.CalculateDamage(allyRat, enemyRat));
+            yield return new WaitForSeconds(2);
+            state = BattleState.ENEMYTURN;
+            enemyTurn();
+       
+        }
+
+
     }
     IEnumerator RunAway()
     {
@@ -150,9 +169,40 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(2);
         encounter.GetComponent<RandomEncounters>().changeState();
     }
+
+    IEnumerator EnemyAttack()
+    {
+        if(state == BattleState.ENEMYTURN)
+        {
+            RatInformation allyRat = playerParty.FindAliveRat();
+            RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+            allySprite.sprite = allyRat.Sprite;
+            attack.interactable = false;
+            run.interactable = false;
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "";
+            dialogueTEXT.text = "Enemies Turn!";
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "";
+            dialogueTEXT.text = "The " + enemyRat.ratName + " attacks!";
+            int damage = allyRat.CalculateDamage(enemyRat, allyRat);
+            print(enemyRat.CalculateDamage(enemyRat, allyRat));
+            allyRat.DealDamage(damage);
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "";
+            playerParty.DebugPartyInfo();
+            state = BattleState.PLAYERTURN;
+            playerTurn();
+        }
+        
+
+
+    }
     public void onAttackButton()
     {
         StartCoroutine(PlayerAttack());
+        state = BattleState.ENEMYTURN;
+        playerL = true;
     }
     public void onRunButton()
     {
