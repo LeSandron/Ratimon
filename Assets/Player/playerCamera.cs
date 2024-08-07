@@ -17,9 +17,9 @@ public class playerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseY -= Input.GetAxis("Mouse Y") * Time.deltaTime * 1200;
+        MouseY -= Input.GetAxis("Mouse Y") * Time.deltaTime * 600;
         MouseY = Mathf.Clamp(MouseY, -90, 90);
-        MouseX -= Input.GetAxis("Mouse X") * Time.deltaTime * 1200;
+        MouseX -= Input.GetAxis("Mouse X") * Time.deltaTime * 600;
         transform.localEulerAngles = new Vector3(MouseY, 0, 0);
 
         Playermodel.transform.localEulerAngles = new Vector3(0, -MouseX, 0);

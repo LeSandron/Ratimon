@@ -29,7 +29,7 @@ public class RandomEncounters : MonoBehaviour
             battleSystem.SetActive(false);
             battleUI.SetActive(false);
             Player.GetComponent<playerMovement>().enabled = true;
-            Player.GetComponent<playerCamera>().enabled = true;
+            Player.GetComponentInChildren<playerCamera>().enabled = true;
         }
     }
 
@@ -53,7 +53,7 @@ public class RandomEncounters : MonoBehaviour
         battleSystem.SetActive(true);
         battleUI.SetActive(true);
         Player.GetComponent<playerMovement>().enabled = false;
-        Player.GetComponent<playerCamera>().enabled = false;;
+        Player.GetComponentInChildren<playerCamera>().enabled = false;
         if (randNumb < 25)
         {
              chosenRat = "Ratomatcho";
