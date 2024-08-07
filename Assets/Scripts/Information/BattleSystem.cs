@@ -11,14 +11,14 @@ public class BattleSystem : MonoBehaviour
     public GameObject player;
     public GameObject healPoint;
     private RatDatabase ratDatabase;
-    public PlayerParty playerParty;
+ 
     public BattleState state;
 
     public Image allySprite, enemySprite;
     public TextMeshProUGUI allyName, enemyName, allyLevel, enemyLevel,dialogueTEXT;
     public Button attack, run;
     public Slider allySHp, enemySHP;
-    public GameObject encounter;
+    public GameObject encounter,playerParty;
 
 
 
@@ -26,14 +26,15 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerParty = GameObject.FindGameObjectWithTag("PartySYS");
         ratDatabase = new RatDatabase();
         state = BattleState.START;
         attack.interactable = false;
         run.interactable = false;
 
-        playerParty.AddPartyRat("Rattack");
-        playerParty.AddPartyRat("Ratbat");
-        playerParty.AddPartyRat("Ratsoak");
+        playerParty.GetComponent<PlayerParty>().AddPartyRat("Rattack");
+        playerParty.GetComponent<PlayerParty>().AddPartyRat("Ratbat");
+        playerParty.GetComponent<PlayerParty>().AddPartyRat("Ratsoak");
         
 
 
@@ -42,7 +43,7 @@ public class BattleSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        playerParty = GameObject.FindGameObjectWithTag("PartySYS");
     }
 
     public void DebugStats(string ratName)
@@ -58,7 +59,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetUpBattle()
     {
         
-        RatInformation allyRat = playerParty.FindAliveRat();
+        RatInformation allyRat = playerParty.GetComponent<PlayerParty>().FindAliveRat();
         RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
 
         DebugStats(allyRat.ratName);
@@ -148,7 +149,7 @@ public class BattleSystem : MonoBehaviour
     {
         if(state == BattleState.PLAYERTURN)
         {
-            RatInformation allyRat = playerParty.FindAliveRat();
+            RatInformation allyRat = playerParty.GetComponent<PlayerParty>().FindAliveRat();
             RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
             allySprite.sprite = allyRat.Sprite;
             allyName.text = allyRat.ratName;
@@ -199,7 +200,7 @@ public class BattleSystem : MonoBehaviour
         if(state == BattleState.ENEMYTURN)
         {
             //if I get attacked and it kills me, dont go to player turn - yup
-            RatInformation allyRat = playerParty.FindAliveRat();
+            RatInformation allyRat = playerParty.GetComponent<PlayerParty>().FindAliveRat();
             RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
             allySprite.sprite = allyRat.Sprite;
             allyName.text = allyRat.ratName;
@@ -215,8 +216,8 @@ public class BattleSystem : MonoBehaviour
             allySHp.maxValue = allyRat.ratHp*2;
             allySHp.value = allyRat.ratMaxHp;
             yield return new WaitForSeconds(2);
-            playerParty.DebugPartyInfo();
-            if(playerParty.FindAliveRat() != null)
+            playerParty.GetComponent<PlayerParty>().DebugPartyInfo();
+            if(playerParty.GetComponent<PlayerParty>().FindAliveRat() != null)
             {
                 state = BattleState.PLAYERTURN;
                 playerTurn();

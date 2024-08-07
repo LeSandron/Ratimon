@@ -289,7 +289,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1813533400028486752
@@ -314,7 +314,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6374498604079941033}
-  - component: {fileID: 1482969820271070028}
+  - component: {fileID: 8964157771926717659}
   m_Layer: 0
   m_Name: PlayersParty
   m_TagString: PartySYS
@@ -337,7 +337,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4120811847168095063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1482969820271070028
+--- !u!114 &8964157771926717659
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
