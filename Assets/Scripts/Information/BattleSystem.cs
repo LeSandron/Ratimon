@@ -19,14 +19,12 @@ public class BattleSystem : MonoBehaviour
 
     RatInformation allyRat;
     RatInformation enemyRat;
-    private int loopCount;
-    private bool playerL, enemyL;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        loopCount = 0;
         ratDatabase = new RatDatabase();
         state = BattleState.START;
         attack.interactable = false;
@@ -137,7 +135,7 @@ public class BattleSystem : MonoBehaviour
     {
         print("Enemies turn");
         StartCoroutine(EnemyAttack());
-        enemyL = true;
+
     }
 
     IEnumerator PlayerAttack()
@@ -147,14 +145,28 @@ public class BattleSystem : MonoBehaviour
             RatInformation allyRat = playerParty.FindAliveRat();
             RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
             allySprite.sprite = allyRat.Sprite;
+            allyName.text = allyRat.ratName;
             attack.interactable = false;
             run.interactable = false;
             print("Ow, dont press my button!");
             enemyRat.DealDamage(enemyRat.CalculateDamage(allyRat, enemyRat));
             print(enemyRat.CalculateDamage(allyRat, enemyRat));
             yield return new WaitForSeconds(2);
-            state = BattleState.ENEMYTURN;
-            enemyTurn();
+
+            if (enemyRat.hasDied() != true)
+            {
+                state = BattleState.ENEMYTURN;
+                enemyTurn();
+
+
+            }
+
+            else
+            {
+                state = BattleState.WON;
+                StartCoroutine(Victory());
+            }
+          
        
         }
 
@@ -174,9 +186,11 @@ public class BattleSystem : MonoBehaviour
     {
         if(state == BattleState.ENEMYTURN)
         {
+            //if I get attacked and it kills me, dont go to player turn - yup
             RatInformation allyRat = playerParty.FindAliveRat();
             RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
             allySprite.sprite = allyRat.Sprite;
+            allyName.text = allyRat.ratName;
             attack.interactable = false;
             run.interactable = false;
             yield return new WaitForSeconds(2);
@@ -191,18 +205,58 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitForSeconds(2);
             dialogueTEXT.text = "";
             playerParty.DebugPartyInfo();
-            state = BattleState.PLAYERTURN;
-            playerTurn();
+            if(playerParty.FindAliveRat() != null)
+            {
+                state = BattleState.PLAYERTURN;
+                playerTurn();
+            }
+            else
+            {
+                state = BattleState.LOST;
+                //Do stuff here please
+            }
+            
         }
         
 
 
     }
+
+    IEnumerator Victory()
+    {
+        if(state == BattleState.WON)
+        {
+            RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+            print("Player beat the wild rat");
+            attack.interactable = false;
+            run.interactable = false;
+            dialogueTEXT.text = "The wild " + enemyRat.ratName + " has died!";
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "You win the battle!";
+            //dish out rewards and exp
+            yield return new WaitForSeconds(2);
+            encounter.GetComponent<RandomEncounters>().changeState();
+        }
+        
+    }
+
+    IEnumerable Loss()
+    {
+        print("The players party was beaten");
+        yield return new WaitForSeconds(2);
+        dialogueTEXT.text = "Returning to Start healing point";
+        //dish out rewards and exp
+        yield return new WaitForSeconds(2);
+        encounter.GetComponent<RandomEncounters>().changeState();
+        // trigger a script for loss.
+    }
+
+
     public void onAttackButton()
     {
         StartCoroutine(PlayerAttack());
         state = BattleState.ENEMYTURN;
-        playerL = true;
+        
     }
     public void onRunButton()
     {

@@ -57,4 +57,12 @@ public class PlayerParty : MonoBehaviour
             print($"Name:{ratInformation.ratName}, Hp { ratInformation.ratMaxHp}, Attack {ratInformation.ratAttack}, Defense {ratInformation.ratDefense}, Speed {ratInformation.ratSpeed}, Sprite {ratInformation.Sprite.name}");
         }
     }
+
+    public void healParty()
+    {
+        foreach(RatInformation ratInformation in Party)
+        {
+            ratInformation.ratMaxHp = ratInformation.ratHp * 2;
+        }
+    }
 }

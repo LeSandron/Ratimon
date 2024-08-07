@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Encounter
   - encountersystem
+  - PartySYS
+  - Healer
   layers:
   - Default
   - TransparentFX
