@@ -68,7 +68,7 @@ public class RandomEncounters : MonoBehaviour
         {
              chosenRat = "Ratbat";
         }
-        battleSystem.GetComponent<BattleSystem>().SetUpBattle();
+        battleSystem.GetComponent<BattleSystem>().startBattle();
         
     }    
 }

@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 53955098}
   - component: {fileID: 53955097}
   m_Layer: 5
-  m_Name: Fight (1)
+  m_Name: Run
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2356,6 +2356,9 @@ MonoBehaviour:
   enemyName: {fileID: 278260110}
   allyLevel: {fileID: 1645467101}
   enemyLevel: {fileID: 356408756}
+  dialogueTEXT: {fileID: 751956503}
+  attack: {fileID: 81386267}
+  run: {fileID: 53955097}
   encounter: {fileID: 862184777}
 --- !u!4 &503763294
 Transform:

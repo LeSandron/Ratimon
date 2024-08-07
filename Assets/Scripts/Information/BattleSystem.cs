@@ -12,7 +12,8 @@ public class BattleSystem : MonoBehaviour
     public BattleState state;
 
     public Image allySprite, enemySprite;
-    public TextMeshProUGUI allyName, enemyName, allyLevel, enemyLevel;
+    public TextMeshProUGUI allyName, enemyName, allyLevel, enemyLevel,dialogueTEXT;
+    public Button attack, run;
     public GameObject encounter;
 
     
@@ -45,10 +46,12 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void SetUpBattle()
+    IEnumerator SetUpBattle()
     {
         RatInformation allyRat = ratDatabase.GetRatByName("Ratsoak");
         RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+
+        dialogueTEXT.text = "A wild " + enemyRat.ratName + " Has appeared!";
 
         allyName.text = allyRat.ratName;
         allyLevel.text = "LV. 5";
@@ -62,11 +65,21 @@ public class BattleSystem : MonoBehaviour
         {
             print("Player is faster");
             state = BattleState.PLAYERTURN;
+
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "Players turn, Choose an Action";
+
+            playerTurn();
         }
         else if(allyRat.ratSpeed < enemyRat.ratSpeed)
         {
             print("Enemy is faster");
             state = BattleState.ENEMYTURN;
+
+            yield return new WaitForSeconds(2);
+            dialogueTEXT.text = "Enemies Turn!";
+
+            enemyTurn();
         }
         else if(allyRat.ratSpeed == enemyRat.ratSpeed)
         {
@@ -75,14 +88,40 @@ public class BattleSystem : MonoBehaviour
             {
                 state = BattleState.PLAYERTURN;
                 print("player won the coin flip");
+
+                yield return new WaitForSeconds(2);
+                dialogueTEXT.text = "Players turn, Choose an Action";
+
+                playerTurn();
             }
             else
             {
                 state = BattleState.ENEMYTURN;
                 print("Enemy won the coin flip");
+
+                yield return new WaitForSeconds(2);
+                dialogueTEXT.text = "Enemies Turn!";
+
+                enemyTurn();
             }
         }
 
+
+
+
+    }
+
+    public void startBattle()
+    {
+        StartCoroutine(SetUpBattle());
+    }
+
+    private void playerTurn()
+    {
+
+    }
+    private void enemyTurn()
+    {
 
     }
 }
