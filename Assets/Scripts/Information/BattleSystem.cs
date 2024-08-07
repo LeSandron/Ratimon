@@ -32,8 +32,8 @@ public class BattleSystem : MonoBehaviour
         run.interactable = false;
 
         playerParty.AddPartyRat("Rattack");
-        //playerParty.AddPartyRat("Ratbat");
-        //playerParty.AddPartyRat("Ratsoak");
+        playerParty.AddPartyRat("Ratbat");
+        playerParty.AddPartyRat("Ratsoak");
         
 
 
@@ -247,7 +247,8 @@ public class BattleSystem : MonoBehaviour
             dialogueTEXT.text = "You win the battle!";
             //dish out rewards and exp
             yield return new WaitForSeconds(2);
-            enemySHP.maxValue = enemyRat.ratHp * 2;
+            //enemySHP.maxValue = enemyRat.ratHp * 2;
+            enemyRat.HealRat();
             encounter.GetComponent<RandomEncounters>().changeState();
         }
         
