@@ -8,6 +8,8 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST,}
 
 public class BattleSystem : MonoBehaviour
 {
+    public GameObject player;
+    public GameObject healPoint;
     private RatDatabase ratDatabase;
     public PlayerParty playerParty;
     public BattleState state;
@@ -15,10 +17,9 @@ public class BattleSystem : MonoBehaviour
     public Image allySprite, enemySprite;
     public TextMeshProUGUI allyName, enemyName, allyLevel, enemyLevel,dialogueTEXT;
     public Button attack, run;
+    public Slider allySHp, enemySHP;
     public GameObject encounter;
 
-    RatInformation allyRat;
-    RatInformation enemyRat;
 
 
 
@@ -31,8 +32,8 @@ public class BattleSystem : MonoBehaviour
         run.interactable = false;
 
         playerParty.AddPartyRat("Rattack");
-        playerParty.AddPartyRat("Ratbat");
-        playerParty.AddPartyRat("Ratsoak");
+        //playerParty.AddPartyRat("Ratbat");
+        //playerParty.AddPartyRat("Ratsoak");
         
 
 
@@ -56,6 +57,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetUpBattle()
     {
+        
         RatInformation allyRat = playerParty.FindAliveRat();
         RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
 
@@ -65,10 +67,14 @@ public class BattleSystem : MonoBehaviour
         dialogueTEXT.text = "A wild " + enemyRat.ratName + " Has appeared!";
 
         allyName.text = allyRat.ratName;
+        allySHp.maxValue = allyRat.ratHp*2;
+        allySHp.value = allyRat.ratMaxHp;
         allyLevel.text = "LV. 5";
         allySprite.sprite = allyRat.Sprite;
 
         enemyName.text = enemyRat.ratName;
+        enemySHP.maxValue = enemyRat.ratMaxHp;
+        enemySHP.value = enemyRat.ratHp*2;
         enemyLevel.text = "LV. 5";
         enemySprite.sprite = enemyRat.Sprite;
 
@@ -151,7 +157,10 @@ public class BattleSystem : MonoBehaviour
             print("Ow, dont press my button!");
             enemyRat.DealDamage(enemyRat.CalculateDamage(allyRat, enemyRat));
             print(enemyRat.CalculateDamage(allyRat, enemyRat));
-            yield return new WaitForSeconds(2);
+            enemySHP.maxValue = enemyRat.ratHp*2;
+            enemySHP.value = enemyRat.ratMaxHp;
+            dialogueTEXT.text = "Players Attacked!";
+            yield return new WaitForSeconds(0.5f);
 
             if (enemyRat.hasDied() != true)
             {
@@ -163,6 +172,7 @@ public class BattleSystem : MonoBehaviour
 
             else
             {
+
                 state = BattleState.WON;
                 StartCoroutine(Victory());
             }
@@ -174,11 +184,13 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator RunAway()
     {
+        RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
         print("IM RUNNING AWAY NOW!");
         attack.interactable = false;
         run.interactable = false;
         dialogueTEXT.text = "The player has fled!";
         yield return new WaitForSeconds(2);
+        enemyRat.HealRat();
         encounter.GetComponent<RandomEncounters>().changeState();
     }
 
@@ -194,16 +206,15 @@ public class BattleSystem : MonoBehaviour
             attack.interactable = false;
             run.interactable = false;
             yield return new WaitForSeconds(2);
-            dialogueTEXT.text = "";
             dialogueTEXT.text = "Enemies Turn!";
             yield return new WaitForSeconds(2);
-            dialogueTEXT.text = "";
             dialogueTEXT.text = "The " + enemyRat.ratName + " attacks!";
             int damage = allyRat.CalculateDamage(enemyRat, allyRat);
-            print(enemyRat.CalculateDamage(enemyRat, allyRat));
+            print(damage * 1 / 2 + 5);
             allyRat.DealDamage(damage);
+            allySHp.maxValue = allyRat.ratHp*2;
+            allySHp.value = allyRat.ratMaxHp;
             yield return new WaitForSeconds(2);
-            dialogueTEXT.text = "";
             playerParty.DebugPartyInfo();
             if(playerParty.FindAliveRat() != null)
             {
@@ -212,8 +223,9 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
+                player.transform.position = healPoint.transform.position;
                 state = BattleState.LOST;
-                //Do stuff here please
+                StartCoroutine(Loss());
             }
             
         }
@@ -235,20 +247,23 @@ public class BattleSystem : MonoBehaviour
             dialogueTEXT.text = "You win the battle!";
             //dish out rewards and exp
             yield return new WaitForSeconds(2);
+            enemySHP.maxValue = enemyRat.ratHp * 2;
             encounter.GetComponent<RandomEncounters>().changeState();
         }
         
     }
 
-    IEnumerable Loss()
+    IEnumerator Loss()
     {
-        print("The players party was beaten");
+        RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+        dialogueTEXT.text = "The players party was beaten";
         yield return new WaitForSeconds(2);
         dialogueTEXT.text = "Returning to Start healing point";
         //dish out rewards and exp
         yield return new WaitForSeconds(2);
+        enemySHP.maxValue = enemyRat.ratHp * 2;
         encounter.GetComponent<RandomEncounters>().changeState();
-        // trigger a script for loss.
+        
     }
 
 

@@ -21,6 +21,10 @@ public class RatInformation
 
     public void DealDamage(int damage)
     {
+        if(damage <= 0)
+        {
+            damage = 1;
+        }
         ratMaxHp -= damage * 1/2 + 5;
         if (ratMaxHp <= 0)
         {
@@ -29,11 +33,15 @@ public class RatInformation
         }
 
     }
+    public void HealRat()
+    {
+        ratMaxHp = ratHp * 2;
+    }
 
     public int CalculateDamage(RatInformation attacker, RatInformation defender)
     {
 
-        return ((attacker.ratAttack / defender.ratDefense)+5);
+        return ((attacker.ratAttack - defender.ratDefense/2));
     }
 }
 
