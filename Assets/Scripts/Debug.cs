@@ -5,7 +5,7 @@ using UnityEngine;
 public class Debug : MonoBehaviour
 {
     string myLog = "*begin log";
-    string filename = "";
+    
     bool doShow = true;
     int kChars = 700;
     void OnEnable() { Application.logMessageReceived += Log; }

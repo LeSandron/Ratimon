@@ -15,9 +15,9 @@ public class PlayerParty : MonoBehaviour
         Party = new List<RatInformation>();
         ratDatabase = new RatDatabase();
 
-        //AddPartyRat("Ratbat");
-        //AddPartyRat("Ratsoak");
-        //AddPartyRat("Rattack");
+        AddPartyRat("Rattack");
+        AddPartyRat("Ratbat");
+        AddPartyRat("Ratsoak");
     }
 
     public void AddPartyRat(string ratInformation)

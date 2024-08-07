@@ -10,7 +10,7 @@ public class BattleSystem : MonoBehaviour
 {
     public GameObject player;
     public GameObject healPoint;
-    private RatDatabase ratDatabase;
+    public RatDatabase ratDatabase;
  
     public BattleState state;
 
@@ -24,25 +24,21 @@ public class BattleSystem : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
+        print("Battlescriptstarted");
         playerParty = GameObject.FindGameObjectWithTag("PartySYS");
         ratDatabase = new RatDatabase();
         state = BattleState.START;
         attack.interactable = false;
         run.interactable = false;
 
-        playerParty.GetComponent<PlayerParty>().AddPartyRat("Rattack");
-        playerParty.GetComponent<PlayerParty>().AddPartyRat("Ratbat");
-        playerParty.GetComponent<PlayerParty>().AddPartyRat("Ratsoak");
-        
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         playerParty = GameObject.FindGameObjectWithTag("PartySYS");
     }
 
@@ -58,9 +54,12 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetUpBattle()
     {
-        
+
+        print("Setupbattlestarted");
         RatInformation allyRat = playerParty.GetComponent<PlayerParty>().FindAliveRat();
+        print("allyratset as " + allyRat.ratName);
         RatInformation enemyRat = ratDatabase.GetRatByName(encounter.GetComponent<RandomEncounters>().chosenRat);
+        print("Enemyratset as " + enemyRat.ratName);
 
         DebugStats(allyRat.ratName);
         DebugStats(enemyRat.ratName);
