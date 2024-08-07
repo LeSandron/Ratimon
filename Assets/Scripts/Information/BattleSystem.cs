@@ -22,7 +22,8 @@ public class BattleSystem : MonoBehaviour
     {
         ratDatabase = new RatDatabase();
         state = BattleState.START;
-        
+        attack.interactable = false;
+        run.interactable = false;
 
         DebugStats("Ratsoak");
         DebugStats("Ratomatcho");
@@ -65,7 +66,8 @@ public class BattleSystem : MonoBehaviour
         {
             print("Player is faster");
             state = BattleState.PLAYERTURN;
-
+            attack.interactable = true;
+            run.interactable = true;
             yield return new WaitForSeconds(2);
             dialogueTEXT.text = "Players turn, Choose an Action";
 
@@ -75,7 +77,8 @@ public class BattleSystem : MonoBehaviour
         {
             print("Enemy is faster");
             state = BattleState.ENEMYTURN;
-
+            attack.interactable = false;
+            run.interactable = false;
             yield return new WaitForSeconds(2);
             dialogueTEXT.text = "Enemies Turn!";
 
@@ -88,7 +91,8 @@ public class BattleSystem : MonoBehaviour
             {
                 state = BattleState.PLAYERTURN;
                 print("player won the coin flip");
-
+                attack.interactable = true;
+                run.interactable = true;
                 yield return new WaitForSeconds(2);
                 dialogueTEXT.text = "Players turn, Choose an Action";
 
@@ -98,7 +102,8 @@ public class BattleSystem : MonoBehaviour
             {
                 state = BattleState.ENEMYTURN;
                 print("Enemy won the coin flip");
-
+                attack.interactable = true;
+                run.interactable = true;
                 yield return new WaitForSeconds(2);
                 dialogueTEXT.text = "Enemies Turn!";
 
@@ -118,10 +123,38 @@ public class BattleSystem : MonoBehaviour
 
     private void playerTurn()
     {
-
+        
     }
     private void enemyTurn()
     {
 
     }
+
+    IEnumerator PlayerAttack()
+    {
+        print("Ow, dont press my button!");
+        attack.interactable = false;
+        run.interactable = false;
+        yield return new WaitForSeconds(2);
+    }
+    IEnumerator RunAway()
+    {
+        print("IM RUNNING AWAY NOW!");
+        attack.interactable = false;
+        run.interactable = false;
+        dialogueTEXT.text = "The player has fled!";
+        yield return new WaitForSeconds(2);
+        encounter.GetComponent<RandomEncounters>().changeState();
+    }
+    public void onAttackButton()
+    {
+        StartCoroutine(PlayerAttack());
+    }
+    public void onRunButton()
+    {
+        StartCoroutine(RunAway());
+    }
+    
+
+
 }
